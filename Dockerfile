@@ -1,26 +1,20 @@
-FROM node:10-alpine
+FROM node:12.18-buster-slim AS build
 
-ARG GIT_URL=https://github.com/DriverTicks/cgm-remote-monitor.git
-ARG GIT_BRANCH=master
+RUN apt-get update && apt-get install -y git
+
+RUN git clone --branch master --depth 1  https://github.com/DriverTicks/cgm-remote-monitor.git /opt/app
+
+
+FROM node:12.18-buster-slim
+
+COPY --from=build /opt/app /opt/app
+WORKDIR /opt/app
+
+RUN apt-get update && apt-get install -y python make build-essential && \
+  npm install && \
+  npm run postinstall && \
+  npm run env
+
 EXPOSE 1337
 
-RUN mkdir -p /nightscout && \
-  apk update && \
-  apk add --no-cache --virtual build-dependencies python make g++ git && \
-  apk add --no-cache tini && \
-  echo "**** install w/ branch $GIT_BRANCH ****" && \
-  git clone $GIT_URL --branch $GIT_BRANCH /nightscout && \
-  cd /nightscout && \
-  npm install --no-cache && \
-  npm run postinstall && \
-  npm audit fix && \
-  apk del build-dependencies && \
-  chown -R node:node /nightscout
-
-ENTRYPOINT ["/sbin/tini", "--"]
-
-WORKDIR /nightscout
-
-USER node
-
-CMD ["node", "lib/server/server.js"]
+CMD ["node", "server.js"]
