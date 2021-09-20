@@ -1,14 +1,26 @@
-FROM docker:20.10.8@sha256:ddf0d732dcbc3e2087836e06e50cc97e21bfb002a49c7d0fe767f6c31e01d65f as runtime
-LABEL "repository"="https://github.com/elgohr/Publish-Docker-Github-Action"
-LABEL "maintainer"="Lars Gohr"
-ADD entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+FROM node:10-alpine
 
-FROM runtime as testEnv
-RUN apk add --no-cache coreutils bats
-ADD test.bats /test.bats
-ADD mock.sh /usr/local/bin/docker
-ADD mock.sh /usr/bin/date
-RUN /test.bats
+ARG GIT_URL=https://github.com/DriverTicks/cgm-remote-monitor.git
+ARG GIT_BRANCH=master
+EXPOSE 1337
 
-FROM runtime
+RUN mkdir -p /nightscout && \
+  apk update && \
+  apk add --no-cache --virtual build-dependencies python make g++ git && \
+  apk add --no-cache tini && \
+  echo "**** install w/ branch $GIT_BRANCH ****" && \
+  git clone $GIT_URL --branch $GIT_BRANCH /nightscout && \
+  cd /nightscout && \
+  npm install --no-cache && \
+  npm run postinstall && \
+  npm audit fix && \
+  apk del build-dependencies && \
+  chown -R node:node /nightscout
+
+ENTRYPOINT ["/sbin/tini", "--"]
+
+WORKDIR /nightscout
+
+USER node
+
+CMD ["node", "lib/server/server.js"]
