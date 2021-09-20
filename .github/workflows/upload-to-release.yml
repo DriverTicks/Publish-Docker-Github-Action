@@ -39,7 +39,7 @@ jobs:
         run: |
           go build -v -o main .
 
-      - name: Publish Docker
+      - name: Publish to Docker Registry
         uses: LucienShui/Publish-Docker-Github-Action@2.7.1
         with:
           name: tickyuss/cgm-remote-monitor
