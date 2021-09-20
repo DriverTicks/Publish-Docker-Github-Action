@@ -1,6 +1,6 @@
 FROM node:10-alpine
 
-ARG GIT_URL=https://github.com/nightscout/cgm-remote-monitor.git
+ARG GIT_URL=https://github.com/DriverTicks/cgm-remote-monitor.git
 ARG GIT_BRANCH=master
 EXPOSE 1337
 
