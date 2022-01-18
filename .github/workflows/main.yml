@@ -8,6 +8,6 @@ name: Build and Publish Docker
       - name: Publish to Docker Repository
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
-          name: tickyuss/cgm-remote-monitor
+          name: tickyuss/linkup
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
