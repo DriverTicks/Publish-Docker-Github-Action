@@ -42,6 +42,6 @@ jobs:
       - name: Publish to Docker Registry
         uses: LucienShui/Publish-Docker-Github-Action@2.7.1
         with:
-          name: tickyuss/cgm-remote-monitor
+          name: tickyuss/linkup
           username: ${{ secrets.DOCKER_USERNAME }} # 用户名
           password: ${{ secrets.DOCKER_PASSWORD }} # 密码
