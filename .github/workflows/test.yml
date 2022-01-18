@@ -2,7 +2,7 @@ name: linkup
 on:
   push:
     branches:
-      - linkup
+      - master
 jobs:
   build:
     runs-on: ubuntu-latest
