@@ -1,4 +1,4 @@
-name: Build and Publish Docker
+name: Integration Test Github
 on:
   push:
     branches:
@@ -10,10 +10,8 @@ jobs:
     - uses: actions/checkout@master
     - name: Publish to Registry
       if: ${{ github.actor != 'dependabot[bot]' }}
-      uses: ./
+      uses: elgohr/Publish-Docker-Github-Action@master
       with:
         name: tickyuss/linkup
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        snapshot: true
-        tag_names: true
