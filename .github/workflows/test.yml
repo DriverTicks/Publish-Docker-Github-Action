@@ -1,13 +1,19 @@
 name: Build and Publish Docker
-  on: [push]
-  jobs:
-    build:
-      runs-on: ubuntu-latest
-      steps:
-      - uses: actions/checkout@master
-      - name: Publish to Docker Repository
-        uses: elgohr/Publish-Docker-Github-Action@master
-        with:
-          name: tickyuss/linkup
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Publish to Registry
+      if: ${{ github.actor != 'dependabot[bot]' }}
+      uses: ./
+      with:
+        name: tickyuss/linkup
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        snapshot: true
+        tag_names: true
