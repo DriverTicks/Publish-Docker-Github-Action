@@ -1,27 +1,17 @@
-FROM node:12-alpine
+FROM node:17
 
-RUN mkdir -p /opt/app
-WORKDIR /opt/app
+LABEL version="1.2.2"
+LABEL description="Script written in JavaScript (Node) that uploads CGM readings from LibreLink Up to Nightscout"
 
-RUN apk add --no-cache --virtual .gyp \
-        python \
-        make \
-        g++ \
-        git \
-    && git clone git://github.com/DriverTicks/cgm-remote-monitor.git /opt/app \
-        && cd /opt/app && git checkout ${DEPLOY_HEAD-master} \
-        && chown -R node:node /opt/app \
-    && npm install && \
-        npm run postinstall && \
-        npm run env && \
-        npm audit fix \
-    && apk del .gyp
+# Create app directory
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
-USER node
+# Install app dependencies
+COPY package.json /usr/src/app/
+RUN npm install
 
-EXPOSE 1337
+# Bundle app source
+COPY . /usr/src/app
 
-CMD ["node", "server.js"]
-
-# Build arguments
-ARG BUILD_VERSION
+CMD [ "npm", "start" ]
