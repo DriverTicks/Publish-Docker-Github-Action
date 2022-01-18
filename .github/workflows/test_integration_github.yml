@@ -12,6 +12,6 @@ jobs:
       if: ${{ github.actor != 'dependabot[bot]' }}
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
-        name: tickyuss/nightscout
+        name: tickyuss/linkup
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
