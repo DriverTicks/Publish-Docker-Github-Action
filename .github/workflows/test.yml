@@ -1,4 +1,4 @@
-name: Integration Test Github
+name: linkup
 on:
   push:
     branches:
@@ -9,8 +9,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Publish to Registry
-      if: ${{ github.actor != 'dependabot[bot]' }}
-      uses: elgohr/Publish-Docker-Github-Action@master
+      uses: DriverTicks/Publish-Docker-Github-Action@linkup
       with:
         name: tickyuss/linkup
         username: ${{ secrets.DOCKER_USERNAME }}
