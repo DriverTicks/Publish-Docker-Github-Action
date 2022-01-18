@@ -2,12 +2,12 @@ name: linkup
 on:
   push:
     branches:
-      - master
+      - linkup
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@linkup
     - name: Publish to Registry
       uses: DriverTicks/Publish-Docker-Github-Action@linkup
       with:
