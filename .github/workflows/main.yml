@@ -2,7 +2,7 @@ name: Integration Test Github
 on:
   push:
     branches:
-      - master
+      - http
 jobs:
   build:
     runs-on: ubuntu-latest
